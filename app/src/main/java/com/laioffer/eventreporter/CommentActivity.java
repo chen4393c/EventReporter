@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -45,9 +47,19 @@ public class CommentActivity extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
+        mCommentSubmitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendComment(eventId);
+                mEditTextComment.setText("");
+                getData(eventId, commentAdapter);
+            }
+        });
+
         getData(eventId, commentAdapter);
     }
 
+    // Get comment data from Firebase Database by eventId and update commentAdapter
     private void getData(final String eventId, final CommentAdapter commentAdapter) {
         mDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -82,6 +94,40 @@ public class CommentActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
+            }
+        });
+    }
+
+    // Send the comment to Firebase Database
+    private void sendComment(final String eventId) {
+        String description = mEditTextComment.getText().toString();
+        if (description.isEmpty()) {
+            return;
+        }
+        Comment comment = new Comment();
+        comment.setCommenter(Utils.username);
+        comment.setEventId(eventId);
+        comment.setDescription(description);
+        comment.setTime(System.currentTimeMillis());
+        String key = mDatabaseReference.child("comments").push().getKey();
+        mDatabaseReference.child("comments").child(key)
+                .setValue(comment, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError,
+                                   DatabaseReference databaseReference) {
+                if (databaseError != null) {
+                    Toast toast = Toast.makeText(
+                            getApplicationContext(),
+                            " The comment is failed, " + "please check your network status.",
+                            Toast.LENGTH_SHORT);
+                    toast.show();
+                } else {
+                    Toast toast = Toast.makeText(
+                            getApplicationContext(),
+                            "The comment is reported.",
+                            Toast.LENGTH_SHORT);
+                    toast.show();
+                }
             }
         });
     }

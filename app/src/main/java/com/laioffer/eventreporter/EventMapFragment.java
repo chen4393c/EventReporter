@@ -1,6 +1,7 @@
 package com.laioffer.eventreporter;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,6 +19,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,7 +34,9 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EventMapFragment extends Fragment implements OnMapReadyCallback {
+public class EventMapFragment extends Fragment implements
+        OnMapReadyCallback,
+        GoogleMap.OnInfoWindowClickListener {
 
     private static final String TAG = "EventMapFragment";
 
@@ -41,10 +45,11 @@ public class EventMapFragment extends Fragment implements OnMapReadyCallback {
     private DatabaseReference database;
     private List<Event> events;
 
+    private GoogleMap mGoogleMap;
+
     public EventMapFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -94,7 +99,10 @@ public class EventMapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         MapsInitializer.initialize(getContext());
+        mGoogleMap = googleMap;
+        mGoogleMap.setOnInfoWindowClickListener(this);
 
+        // Get current location
         final  LocationTracker locationTracker = new LocationTracker(getActivity());
         locationTracker.getLocation();
         double curLatitude = locationTracker.getLatitude();
@@ -136,16 +144,17 @@ public class EventMapFragment extends Fragment implements OnMapReadyCallback {
                 // Set up every events
                 for (Event event : events) {
                     // Create marker
-                    MarkerOptions marker = new MarkerOptions().position(
+                    MarkerOptions markerOptions = new MarkerOptions().position(
                             new LatLng(event.getLatitude(), event.getLongitude())
                     ).title(event.getTitle());
 
                     // Change marker icon
-                    marker.icon(BitmapDescriptorFactory
+                    markerOptions.icon(BitmapDescriptorFactory
                             .defaultMarker(BitmapDescriptorFactory.HUE_ROSE));
 
                     // Add marker
-                    googleMap.addMarker(marker);
+                    Marker marker = googleMap.addMarker(markerOptions);
+                    marker.setTag(event);
                 }
             }
 
@@ -154,5 +163,14 @@ public class EventMapFragment extends Fragment implements OnMapReadyCallback {
 
             }
         });
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Event event = (Event) marker.getTag();
+        Intent intent = new Intent(getContext(), CommentActivity.class);
+        String eventId = event.getId();
+        intent.putExtra("EventID", eventId);
+        getContext().startActivity(intent);
     }
 }

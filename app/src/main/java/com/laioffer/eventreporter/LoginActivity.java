@@ -18,6 +18,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
+    private static final String TAG = "LoginActivity";
+
     private EditText mUsernameEditText;
     private EditText mPasswordEditText;
     private Button mSubmitButton;

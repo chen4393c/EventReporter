@@ -52,7 +52,7 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
 
     // Keep position of the ads in the list\
-    private Map<Integer, Object> map = new HashMap<Integer, Object>();
+    private Map<Integer, Object> map = new HashMap<>();
 
     private static final String ADMOB_AD_UNIT_ID = "ca-app-pub-3940256099942544/2247696110";
     private static final String ADMOB_APP_ID = "ca-app-pub-3940256099942544~3347511713";
@@ -65,19 +65,17 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public EventListAdapter(List<Event> events, Context context) {
         this.context = context;
         eventList = events;
-
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        //TODO : the idea is to create a new EventList that holds both ads and original events, if
-        //corresponding position is ads, add to the map and put empty event in corresponding
-        //location, for example, if we have 4 events passed in, we want to do create following list
-        //and export ads location
+        // The idea is to create a new EventList that holds both ads and original events, if
+        // corresponding position is ads, add to the map and put empty event in corresponding
+        // location, for example, if we have 4 events passed in, we want to do create following list
+        // and export ads location
         //  <List Position> :0              1           2              3             4         5
         //                   Event1       Ads1       Events2         Events3        Ads2   Event4
 
-        //CODE BLOCK
         eventList = new ArrayList<Event>();
         int count = 0;
         for (int i = 0; i < events.size(); i++) {
@@ -148,8 +146,7 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         switch (holder.getItemViewType()) {
-            //TODO : according to different view type, show corresponding view
-            //CODEBLOCK
+            // According to different view type, show corresponding view
             case TYPE_ITEM:
                 ViewHolder viewHolderItem = (ViewHolder) holder;
                 configureItemView(viewHolderItem, position);
@@ -312,7 +309,6 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             public void onClick(View view) {
                 Intent intent = new Intent(context, CommentActivity.class);
                 String eventId = event.getId();
-                Log.i("ddddd", eventId + "");
                 intent.putExtra("EventID", eventId);
                 context.startActivity(intent);
             }

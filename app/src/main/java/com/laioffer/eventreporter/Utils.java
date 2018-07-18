@@ -37,8 +37,8 @@ public class Utils {
      * @return formatted string of time stamp
      */
     public static String timeTransformer(long millis) {
-        long currenttime = System.currentTimeMillis();
-        long diff = currenttime - millis;
+        long currentTime = System.currentTimeMillis();
+        long diff = currentTime - millis;
         long seconds = TimeUnit.MILLISECONDS.toSeconds(diff);
         long minutes = TimeUnit.MILLISECONDS.toMinutes(diff);
         long hours = TimeUnit.MILLISECONDS.toHours(diff);
@@ -61,18 +61,16 @@ public class Utils {
     public static Bitmap getBitmapFromURL(String imageUrl) {
         Bitmap bitmap = null;
 
-        if (bitmap == null) {
-            try {
-                URL url = new URL(imageUrl);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setDoInput(true);
-                connection.connect();
-                InputStream input = connection.getInputStream();
-                bitmap = BitmapFactory.decodeStream(input);
-            } catch (IOException e) {
-                e.printStackTrace();
-                Log.e("Error: ", e.getMessage().toString());
-            }
+        try {
+            URL url = new URL(imageUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            bitmap = BitmapFactory.decodeStream(input);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e("Error: ", e.getMessage().toString());
         }
 
         return bitmap;

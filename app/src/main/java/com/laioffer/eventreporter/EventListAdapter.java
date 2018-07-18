@@ -258,8 +258,11 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         holder.location.setText(locations[1] + "," + locations[2]);
         holder.description.setText(event.getDescription());
         holder.time.setText(Utils.timeTransformer(event.getTime()));
+
         holder.good_number.setText(String.valueOf(event.getLike()));
-//holder.comment_number.setText();
+
+//        holder.comment_number.setText(String.valueOf(event.getCommentNumber()));
+
         if (event.getImgUri() != null) {
             final String url = event.getImgUri();
             holder.imgview.setVisibility(View.VISIBLE);
@@ -278,8 +281,7 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             holder.imgview.setVisibility(View.GONE);
         }
 
-
-//When user likes the event, push like number to firebase database
+        // When user likes the event, push like number to firebase database
         holder.img_view_good.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -287,9 +289,9 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            Event recordedevent = snapshot.getValue(Event.class);
-                            if (recordedevent.getId().equals(event.getId())) {
-                                int number = recordedevent.getLike();
+                            Event recordedEvent = snapshot.getValue(Event.class);
+                            if (recordedEvent.getId().equals(event.getId())) {
+                                int number = recordedEvent.getLike();
                                 holder.good_number.setText(String.valueOf(number + 1));
                                 snapshot.getRef().child("like").setValue(number + 1);
                                 break;

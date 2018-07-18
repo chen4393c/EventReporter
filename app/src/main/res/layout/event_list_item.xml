@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_marginTop="5dp"
-    android:layout_marginBottom="5dp"
-    android:orientation="vertical"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:background="#FFFFFF"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_marginTop="5dp"
+              android:layout_marginBottom="5dp"
+              android:orientation="vertical"
+              android:paddingLeft="16dp"
+              android:paddingRight="16dp"
+              android:background="#FFFFFF"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
     
     <RelativeLayout
         android:layout_width="match_parent"
@@ -22,7 +22,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:textSize="16sp"
-            android:fontFamily="Roboto"/>
+            android:fontFamily="Roboto"
+            tools:text="event item time"/>
 
         <TextView
             android:id="@+id/event_item_location"
@@ -30,7 +31,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:textSize="16sp"
-            android:fontFamily="Roboto"/>
+            android:fontFamily="Roboto"
+            tools:text="event item location"/>
 
     </RelativeLayout>
 
@@ -51,7 +53,8 @@
         android:ellipsize="end"
         android:maxLines="2"
         android:textSize="16sp"
-        android:fontFamily="Roboto"/>
+        android:fontFamily="Roboto"
+        tools:text="event item description"/>
 
     <ImageView
         android:id="@+id/event_item_img"

@@ -5,7 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 public class EventActivity extends AppCompatActivity {
+
     private Fragment mEventsFragment;
+    private Fragment mEventMapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,7 +17,10 @@ public class EventActivity extends AppCompatActivity {
         if (mEventsFragment == null) {
             mEventsFragment = new EventsFragment();
         }
+
+        mEventMapFragment = new EventMapFragment();
+
         getSupportFragmentManager().beginTransaction().
-                add(R.id.relativelayout_event, mEventsFragment).commit();
+                add(R.id.relativelayout_event, mEventMapFragment).commit();
     }
 }

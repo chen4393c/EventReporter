@@ -96,6 +96,28 @@ public class Event {
     public String getAddress() { return this.address; }
     public String getDescription() { return this.description; }
 
+    /*
+    * Add lat/lon attributes into Event
+    * */
+    private double latitude;
+    private double longitude;
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
     @Override
     public String toString() {
         return "EventObject: " + title + ", " + address + ", " + description + ", " + imgUri;

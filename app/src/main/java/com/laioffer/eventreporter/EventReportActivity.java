@@ -169,6 +169,9 @@ public class EventReportActivity extends AppCompatActivity {
         event.setAddress(location);
         event.setDescription(description);
         event.setTime(System.currentTimeMillis());
+        event.setLatitude(mLocationTracker.getLatitude());
+        event.setLongitude(mLocationTracker.getLongitude());
+
         event.setUsername(Utils.username);
         String key = database.child("events").push().getKey();
         event.setId(key);

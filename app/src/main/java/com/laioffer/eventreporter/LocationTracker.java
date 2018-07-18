@@ -11,17 +11,14 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.InputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,16 +99,13 @@ public class LocationTracker implements LocationListener {
                 if (locationManager != null) {
                     location = locationManager
                             .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                    Log.d(TAG, "location after network: " + location);
                     if (location != null) {
                         latitude = location.getLatitude();
                         longitude = location.getLongitude();
                     }
                 }
-            }
-
-            // If GPS enabled, get lat/lon using GPS services
-            if (mIsGPSEnabled) {
+            } else if (mIsGPSEnabled) {
+                // If GPS enabled, get lat/lon using GPS services
                 if (location == null) {
                     locationManager.requestLocationUpdates(
                             LocationManager.GPS_PROVIDER,
@@ -122,7 +116,6 @@ public class LocationTracker implements LocationListener {
                     if (locationManager != null) {
                         location = locationManager
                                 .getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                        Log.d(TAG, "location after gps: " + location);
                         if (location != null) {
                             latitude = location.getLatitude();
                             longitude = location.getLongitude();
@@ -165,26 +158,24 @@ public class LocationTracker implements LocationListener {
     }
 
     public static JSONObject getLocationInfo(double lat, double lon) {
-        HttpGet httpGet = new HttpGet(
-                "http://maps.googleapis.com/maps/api/geocode/json?latlng="
-                        + lat + "," + lon + "&sensor=true"
-        );
-        HttpClient client = new DefaultHttpClient();
-        HttpResponse response;
+        final String api = "http://maps.googleapis.com/maps/api/geocode/json?latlng="
+                + lat + "," + lon + "&sensor=true";
+        // buffer
         StringBuilder stringBuilder = new StringBuilder();
 
         try {
-            response = client.execute(httpGet);
-            HttpEntity entity = response.getEntity();
-            InputStream stream = entity.getContent();
-            int b;
-            while ((b = stream.read()) != -1) {
-                stringBuilder.append((char) b);
+            URL url = new URL(api);
+            URLConnection connection = url.openConnection();
+            BufferedReader in = new BufferedReader(new InputStreamReader(
+                    connection.getInputStream()
+            ));
+            // Read the response and store it into the buffer
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                stringBuilder.append(inputLine);
             }
-        } catch (ClientProtocolException e) {
-
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
 
         JSONObject jsonObject = new JSONObject();
@@ -205,27 +196,25 @@ public class LocationTracker implements LocationListener {
      * @return Array of addresses, street, city, state
      * */
     public List<String> getCurrentLocationViaJSON(double lat, double lon) {
-//        Log.d(TAG, "lat: " + lat + "lon: " + lon);
+        Log.i(TAG, "lat: " + lat + "lon: " + lon);
         List<String> addresses = new ArrayList<>();
         JSONObject jsonObject = getLocationInfo(lat, lon);
         try {
             String status = jsonObject.getString("status").toString();
+            Log.d(TAG, "status: " + status);
             if (status.equalsIgnoreCase("OK")) {
                 JSONArray results = jsonObject.getJSONArray("results");
-
-                int i = 0;
-                do {
-                    JSONObject r = results.getJSONObject(i);
-                    if (!r.getString("formatted_address").equals("")) {
-                        String[] formatted_addresses = r.getString("formatted_address")
-                                .split(",");
-                        addresses.add(formatted_addresses[0]);
-                        addresses.add(formatted_addresses[1]);
-                        addresses.add(formatted_addresses[2]);
-                        addresses.add(formatted_addresses[3]);
+                for (int i = 0; i < results.length(); i++) {
+                    JSONObject object = results.getJSONObject(i);
+                    String formattedAddress = object.getString("formatted_address");
+                    if (!formattedAddress.isEmpty()) {
+                        String[] addressArray = formattedAddress.split(",");
+                        for (String address : addressArray) {
+                            addresses.add(address);
+                        }
+                        break;
                     }
-                    i++;
-                } while (i < results.length());
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();

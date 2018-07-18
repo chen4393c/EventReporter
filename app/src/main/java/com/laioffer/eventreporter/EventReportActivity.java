@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EventReportActivity extends AppCompatActivity {
-    private static final String TAG = EventReportActivity.class.getSimpleName();
+    private static final String TAG = "EventReportActivity";// EventReportActivity.class.getSimpleName();
     private EditText mEditTextLocation;
     private EditText mEditTextTitle;
     private EditText mEditTextContent;

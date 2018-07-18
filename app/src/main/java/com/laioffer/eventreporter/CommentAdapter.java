@@ -82,7 +82,6 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private void configureEventView(final EventViewHolder holder) {
         holder.eventUser.setText(event.getUsername());
-//        holder.eventUser.setText("user");
         holder.eventTitle.setText(event.getTitle());
         String[] locations = event.getAddress().split(",");
         holder.eventLocation.setText(locations[1] + "," + locations[2]);
@@ -118,9 +117,9 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            Event recordedevent = snapshot.getValue(Event.class);
-                            if (recordedevent.getId().equals(event.getId())) {
-                                int number = recordedevent.getLike();
+                            Event recordedEvent = snapshot.getValue(Event.class);
+                            if (recordedEvent.getId().equals(event.getId())) {
+                                int number = recordedEvent.getLike();
                                 holder.eventLikeNumber.setText(String.valueOf(number + 1));
                                 snapshot.getRef().child("like").setValue(number + 1);
                                 break;
@@ -138,7 +137,7 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     private void configureCommentView(final CommentViewHolder commentHolder, final int position) {
-        //Why is position - 1?
+        // Why is position - 1?
         final Comment comment = commentList.get(position - 1);
         commentHolder.commentUser.setText(comment.getCommenter());
         commentHolder.commentDescription.setText(comment.getDescription());

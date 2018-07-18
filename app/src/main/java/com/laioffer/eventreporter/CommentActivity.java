@@ -36,17 +36,15 @@ public class CommentActivity extends AppCompatActivity {
         Intent intent = getIntent();
         final String eventId = intent.getStringExtra("EventID");
 
-        mRecyclerView = findViewById(R.id.comment_recycler_view);
-        mEditTextComment = findViewById(R.id.comment_edittext);
-        mCommentSubmitButton = findViewById(R.id.comment_submit);
+        mRecyclerView = (RecyclerView) findViewById(R.id.comment_recycler_view);
+        mEditTextComment = (EditText) findViewById(R.id.comment_edittext);
+        mCommentSubmitButton = (Button) findViewById(R.id.comment_submit);
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         commentAdapter = new CommentAdapter(this);
         mRecyclerView.setHasFixedSize(true);
-        //mRecyclerView.setAdapter(commentAdapter);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-
         getData(eventId, commentAdapter);
     }
 
@@ -54,7 +52,6 @@ public class CommentActivity extends AppCompatActivity {
         mDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.i("dddddd", "called");
                 DataSnapshot commentSnapshot = dataSnapshot.child("comments");
                 List<Comment> comments = new ArrayList<Comment>();
                 for (DataSnapshot noteDataSnapshot : commentSnapshot.getChildren()) {
@@ -63,7 +60,6 @@ public class CommentActivity extends AppCompatActivity {
                         comments.add(comment);
                     }
                 }
-
                 mDatabaseReference.getRef().child("events").child(eventId).
                         child("commentNumber").setValue(comments.size());
                 commentAdapter.setComments(comments);
@@ -71,10 +67,6 @@ public class CommentActivity extends AppCompatActivity {
                 DataSnapshot eventSnapshot = dataSnapshot.child("events");
                 for (DataSnapshot noteDataSnapshot : eventSnapshot.getChildren()) {
                     Event event = noteDataSnapshot.getValue(Event.class);
-                    Log.i(TAG, "eventTest: " + event);
-//                    String testEventIdMsg = "event.getId(): " + event.getId() + ", ";
-//                    testEventIdMsg += "eventId: " + eventId;
-//                    Log.i(TAG, testEventIdMsg);
                     if (event.getId().equals(eventId)) {
                         commentAdapter.setEvent(event);
                         break;

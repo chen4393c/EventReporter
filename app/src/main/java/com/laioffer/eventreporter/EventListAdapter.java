@@ -252,7 +252,11 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         final Event event = eventList.get(position);
         holder.title.setText(event.getTitle());
         String[] locations = event.getAddress().split(",");
-        holder.location.setText(locations[1] + "," + locations[2]);
+        if (locations.length >= 3) {
+            holder.location.setText(locations[1] + "," + locations[2]);
+        } else {
+            holder.location.setText("unknown area");
+        }
         holder.description.setText(event.getDescription());
         holder.time.setText(Utils.timeTransformer(event.getTime()));
 

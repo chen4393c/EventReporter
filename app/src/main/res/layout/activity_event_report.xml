@@ -72,13 +72,13 @@
     <ImageView
         android:id="@+id/img_event_picture_capture"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:layout_below="@+id/edit_text_event_content"
         android:layout_centerVertical="true"
         android:adjustViewBounds="true"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:visibility="gone"/>
+        android:visibility="visible"/>
 
     <RelativeLayout
         android:layout_height="50dp"

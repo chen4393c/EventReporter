@@ -217,9 +217,9 @@ public class EventReportActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         try {
             if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null) {
-                Uri seletedImage = data.getData();
+                Uri selectedImage = data.getData();
                 img_event_picture.setVisibility(View.VISIBLE);
-                mImgUri = seletedImage;
+                mImgUri = selectedImage;
                 img_event_picture.setImageURI(mImgUri);
             }
         } catch (Exception ex) {

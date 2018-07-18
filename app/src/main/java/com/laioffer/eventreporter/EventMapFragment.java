@@ -2,6 +2,8 @@ package com.laioffer.eventreporter;
 
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -36,7 +38,8 @@ import java.util.List;
  */
 public class EventMapFragment extends Fragment implements
         OnMapReadyCallback,
-        GoogleMap.OnInfoWindowClickListener {
+        GoogleMap.OnInfoWindowClickListener,
+        GoogleMap.OnMarkerClickListener {
 
     private static final String TAG = "EventMapFragment";
 
@@ -44,6 +47,7 @@ public class EventMapFragment extends Fragment implements
     private View mView;
     private DatabaseReference database;
     private List<Event> events;
+    private Marker lastClicked;
 
     private GoogleMap mGoogleMap;
 
@@ -101,6 +105,7 @@ public class EventMapFragment extends Fragment implements
         MapsInitializer.initialize(getContext());
         mGoogleMap = googleMap;
         mGoogleMap.setOnInfoWindowClickListener(this);
+        mGoogleMap.setOnMarkerClickListener(this);
 
         // Get current location
         final  LocationTracker locationTracker = new LocationTracker(getActivity());
@@ -172,5 +177,42 @@ public class EventMapFragment extends Fragment implements
         String eventId = event.getId();
         intent.putExtra("EventID", eventId);
         getContext().startActivity(intent);
+    }
+
+    // When the data loads, add images to icon
+    @Override
+    public boolean onMarkerClick(final Marker marker) {
+        final Event event = (Event) marker.getTag();
+        if (lastClicked != null && lastClicked.equals(marker)) {
+            lastClicked = null;
+            marker.hideInfoWindow();
+            marker.setIcon(null);
+            return true;
+        }
+
+        lastClicked = marker;
+
+        if (event.getImgUri() == null || event.getImgUri().isEmpty()) {
+            return false;
+        }
+
+        new AsyncTask<Void, Void, Bitmap>() {
+            @Override
+            protected Bitmap doInBackground(Void... voids) {
+                Bitmap bitmap = Utils.getBitmapFromURL(event.getImgUri());
+                return bitmap;
+            }
+
+            @Override
+            protected void onPostExecute(Bitmap bitmap) {
+                super.onPostExecute(bitmap);
+                if (bitmap != null) {
+                    marker.setIcon(BitmapDescriptorFactory.fromBitmap(bitmap));
+                    marker.setTitle(event.getTitle());
+                }
+            }
+        }.execute();
+
+        return false;
     }
 }

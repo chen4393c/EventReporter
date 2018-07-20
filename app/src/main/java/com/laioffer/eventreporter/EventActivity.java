@@ -22,7 +22,7 @@ public class EventActivity extends AppCompatActivity {
         }
 
         getSupportFragmentManager().beginTransaction().
-                add(R.id.relativelayout_event, mEventsFragment).commit();
+                add(R.id.relative_layout_event, mEventsFragment).commit();
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView)
                 findViewById(R.id.navigation);
@@ -35,7 +35,7 @@ public class EventActivity extends AppCompatActivity {
                         switch (item.getItemId()) {
                             case R.id.action_event_list:
                                 getSupportFragmentManager().beginTransaction()
-                                        .replace(R.id.relativelayout_event,
+                                        .replace(R.id.relative_layout_event,
                                                 mEventsFragment).commit();
                                 break;
                             case R.id.action_event_map:
@@ -43,7 +43,7 @@ public class EventActivity extends AppCompatActivity {
                                     mEventMapFragment = new EventMapFragment();
                                 }
                                 getSupportFragmentManager().beginTransaction()
-                                        .replace(R.id.relativelayout_event,
+                                        .replace(R.id.relative_layout_event,
                                                 mEventMapFragment).commit();
                         }
                         return false;

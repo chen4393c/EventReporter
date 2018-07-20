@@ -3,6 +3,7 @@ package com.laioffer.eventreporter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -51,8 +52,11 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private LayoutInflater inflater;
 
 
-    // Keep position of the ads in the list\
+    // Keep position of the ads in the list
     private Map<Integer, Object> map = new HashMap<>();
+
+    // Keep the real position of the event in the original event list
+    private Map<Integer, Integer> originalPositions = new HashMap<>();
 
     private static final String ADMOB_AD_UNIT_ID = "ca-app-pub-3940256099942544/2247696110";
     private static final String ADMOB_APP_ID = "ca-app-pub-3940256099942544~3347511713";
@@ -85,6 +89,7 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 eventList.add(new Event());
             }
             eventList.add(events.get(i));
+            originalPositions.put(eventList.size() - 1, i);
         }
     }
 
@@ -145,10 +150,17 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+        Integer originalPosition = originalPositions.get(position);
+        originalPosition = originalPosition == null ? position : originalPosition;
         switch (holder.getItemViewType()) {
             // According to different view type, show corresponding view
             case TYPE_ITEM:
                 ViewHolder viewHolderItem = (ViewHolder) holder;
+                viewHolderItem.layout.setBackgroundColor(
+                        Color.parseColor(
+                                Utils.colorSet[originalPosition % Utils.colorSet.length]
+                        )
+                );
                 configureItemView(viewHolderItem, position);
                 break;
             case TYPE_ADS:
@@ -157,7 +169,6 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 break;
         }
     }
-
 
     /**
      * refresh ads, there are several steps falling through

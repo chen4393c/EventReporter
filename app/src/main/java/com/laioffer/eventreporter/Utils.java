@@ -20,6 +20,8 @@ public class Utils {
 
     public static final double LOC_SHAKE = 0.02;
 
+    public static final String[] colorSet = new String[] {"#FF00FF", "#00FFFF", "#CD5C5C"};
+
     public static String md5Encryption(final String input) {
         String result = "";
         try {

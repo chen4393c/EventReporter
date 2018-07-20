@@ -2,12 +2,13 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:paddingLeft="20dp"
     android:paddingRight="20dp"
     android:paddingTop="20dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/beach_coast_daylight">
 
     <!-- username tag-->
     <TextView
@@ -20,11 +21,13 @@
 
     <!-- username edit area-->
     <EditText
+        android:backgroundTint="@color/Orange"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="Roboto"
         android:id="@+id/editTextLogin"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"/>
+
 
     <!-- password tag-->
     <TextView
@@ -37,6 +40,7 @@
 
     <!-- password edit area-->
     <EditText
+        android:backgroundTint="@color/Orange"
         android:fontFamily="Roboto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

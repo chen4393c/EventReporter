@@ -3,9 +3,9 @@ package com.laioffer.eventreporter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -157,9 +157,9 @@ public class EventListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             case TYPE_ITEM:
                 ViewHolder viewHolderItem = (ViewHolder) holder;
                 viewHolderItem.layout.setBackgroundColor(
-                        Color.parseColor(
-                                Utils.colorSet[originalPosition % Utils.colorSet.length]
-                        )
+                        ContextCompat.getColor(context,
+                                Utils.colorSet[originalPosition % Utils.colorSet.length])
+//                        ContextCompat.getColor(context, R.color.Aqua)
                 );
                 configureItemView(viewHolderItem, position);
                 break;

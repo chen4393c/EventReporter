@@ -1,5 +1,7 @@
 package com.laioffer.eventreporter;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
@@ -79,6 +81,13 @@ public class Utils {
             Log.e("Error: ", e.getMessage().toString());
         }
 
+        return bitmap;
+    }
+
+    // Get image from res folder
+    public static Bitmap getBitmapFromResource(Context context, int resId) {
+        Resources resources = context.getResources();
+        Bitmap bitmap = BitmapFactory.decodeResource(resources, resId);
         return bitmap;
     }
 

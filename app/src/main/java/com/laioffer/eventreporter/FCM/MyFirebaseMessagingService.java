@@ -4,6 +4,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
@@ -11,8 +13,10 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.laioffer.eventreporter.EventActivity;
 import com.laioffer.eventreporter.MainActivity;
 import com.laioffer.eventreporter.R;
+import com.laioffer.eventreporter.Utils;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -36,7 +40,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             }
         }
 
-        sendNotification("Send notification to start EventReporter");
+        sendNotification(remoteMessage);
 
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
@@ -53,8 +57,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     /*
     * Create and show a simple notification containing the received FCM message
     * */
-    private void sendNotification(String fcmMessage) {
-        Intent intent = new Intent(this, MainActivity.class);
+    private void sendNotification(RemoteMessage remoteMessage) {
+        Log.d(TAG, "sendNotification(remoteMessage)");
+        Intent intent = new Intent(this, EventActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         // Define pending intent to trigger activity
@@ -70,10 +75,21 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Create Notification according to builder pattern
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, "EventReport");
+        String imgUri = remoteMessage.getData().get("imgUri");
+
+        if (imgUri != null && !imgUri.isEmpty()) {
+            notificationBuilder.setLargeIcon(Utils.getBitmapFromURL(imgUri));
+        } else {
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round);
+            // Cannot receive notification when no image url
+            Log.d(TAG, "no image bitmap: " + bitmap.toString());
+            notificationBuilder.setLargeIcon(bitmap);
+        }
+
         notificationBuilder
                 .setSmallIcon(R.drawable.icon)
-                .setContentTitle("FCM Message")
-                .setContentText(fcmMessage)
+                .setContentTitle(remoteMessage.getData().get("title"))
+                .setContentText(remoteMessage.getData().get("description"))
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);

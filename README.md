@@ -33,3 +33,8 @@ Adding some comments for each event is also available.
 <p align="center">
   <img src="https://github.com/chen4393c/EventReporter/blob/master/screenshots/comment.png" width="350" title="hover text">
 </p>
+
+Users can receive a push notification as soon as they upload an event with a photo.
+<p align="center">
+  <img src="https://github.com/chen4393c/EventReporter/blob/master/screenshots/notification.png" width="350" title="hover text">
+</p>

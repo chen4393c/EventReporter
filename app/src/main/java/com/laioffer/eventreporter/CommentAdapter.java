@@ -90,24 +90,26 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         holder.eventCommentNumber.setText(String.valueOf(event.getCommentNumber()));
         holder.eventLikeNumber.setText(String.valueOf(event.getLike()));
 
-
-        if (event.getImgUri() != null) {
-            final String url = event.getImgUri();
-            holder.eventImgView.setVisibility(View.VISIBLE);
-            new AsyncTask<Void, Void, Bitmap>(){
-                @Override
-                protected Bitmap doInBackground(Void... params) {
-                    return Utils.getBitmapFromURL(url);
-                }
-
-                @Override
-                protected void onPostExecute(Bitmap bitmap) {
-                    holder.eventImgView.setImageBitmap(bitmap);
-                }
-            }.execute();
-        } else {
-            holder.eventImgView.setVisibility(View.GONE);
-        }
+        /**
+         * Block Event image in comment fragment
+         * */
+//        if (event.getImgUri() != null) {
+//            final String url = event.getImgUri();
+//            holder.eventImgView.setVisibility(View.VISIBLE);
+//            new AsyncTask<Void, Void, Bitmap>(){
+//                @Override
+//                protected Bitmap doInBackground(Void... params) {
+//                    return Utils.getBitmapFromURL(url);
+//                }
+//
+//                @Override
+//                protected void onPostExecute(Bitmap bitmap) {
+//                    holder.eventImgView.setImageBitmap(bitmap);
+//                }
+//            }.execute();
+//        } else {
+//            holder.eventImgView.setVisibility(View.GONE);
+//        }
 
 
         holder.eventImgViewGood.setOnClickListener(new View.OnClickListener() {

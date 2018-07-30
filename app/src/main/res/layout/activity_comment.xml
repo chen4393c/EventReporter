@@ -16,13 +16,14 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="5dp"
         android:layout_alignParentBottom="true">
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/comment_submit"
-            android:id="@+id/comment_edittext"/>
+            android:id="@+id/comment_edit_text"/>
 
         <Button
             android:layout_width="wrap_content"

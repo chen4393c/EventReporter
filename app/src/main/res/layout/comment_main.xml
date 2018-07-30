@@ -110,7 +110,8 @@
             android:layout_width="match_parent"
             android:layout_height="210dp"
             android:paddingBottom="15dp"
-            android:src="@drawable/icon"/>
+            android:src="@drawable/icon"
+            android:visibility="gone"/>
 
     </LinearLayout>
 

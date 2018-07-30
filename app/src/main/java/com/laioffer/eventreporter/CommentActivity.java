@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,7 +38,7 @@ public class CommentActivity extends AppCompatActivity {
         final String eventId = intent.getStringExtra("EventID");
 
         mRecyclerView = (RecyclerView) findViewById(R.id.comment_recycler_view);
-        mEditTextComment = (EditText) findViewById(R.id.comment_edittext);
+        mEditTextComment = (EditText) findViewById(R.id.comment_edit_text);
         mCommentSubmitButton = (Button) findViewById(R.id.comment_submit);
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
